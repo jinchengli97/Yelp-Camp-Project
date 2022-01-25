@@ -1,3 +1,4 @@
+// environment, error stack will only shows when it is not production
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
@@ -22,7 +23,8 @@ const campgroundsRoutes = require("./routes/campgrounds");
 const reviewsRoutes = require("./routes/reviews");
 const MongoDBStore = require("connect-mongo");
 
-const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
+const dbUrl = "mongodb://localhost:27017/yelp-camp";
+// const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
 mongoose.connect(dbUrl, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -123,12 +125,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/fakeUser", async (req, res) => {
-  const user = new User({ email: "jinchengli@gmail.com", username: "jinchengli" });
-  const newUser = await User.register(user, "0903");
-  res.send(newUser);
-});
-
 // with router
 app.use("/", userRoutes);
 app.use("/campgrounds", campgroundsRoutes);
@@ -141,6 +137,7 @@ app.get("/", (req, res) => {
 
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
+  // throw the error to the next middleware to render error page
 });
 
 app.use((err, req, res, next) => {
@@ -151,5 +148,5 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log("on port ${port}");
+  console.log(`on port ${port}`);
 });

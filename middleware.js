@@ -4,6 +4,7 @@ const Campground = require("./models/campground");
 const Review = require("./models/review");
 
 module.exports.isLoggedIn = (req, res, next) => {
+  // passport also gives us a req.user
   if (!req.isAuthenticated()) {
     // store the url they requesting and redirect them to the page they left
     req.session.returnTo = req.originalUrl;
@@ -18,6 +19,8 @@ module.exports.validateCampground = (req, res, next) => {
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(msg, 400);
+    // after error is thrown, the catchAsync function will catch it and pass to the next middleware to
+    // properly handle and render the error page
   } else {
     next();
   }

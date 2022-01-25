@@ -47,6 +47,8 @@ CampgroundSchema.virtual("properties.popUpMarkUp").get(function () {
   return `<strong><a href="/campgrounds/${this._id}">${this.title}</a></strong>
   <p>${this.description.substring(0, 60)}......</p>`;
 });
+
+// findByIdAndDelete will trigger findOneAndDelete middleware
 CampgroundSchema.post("findOneAndDelete", async function (doc) {
   if (doc) {
     await Review.deleteMany({

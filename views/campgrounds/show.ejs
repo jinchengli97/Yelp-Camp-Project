@@ -34,6 +34,7 @@
         <li class="list-group-item">$<%= campground.price %>/night</li>
       </ul>
       <!-- where does the currentUser._id came from -->
+      <!-- the currentUser is from res.locals.currentUser = req.user from the app.js file -->
       <% if (currentUser && campground.author.equals(currentUser._id)) { %>
       <div class="card-body">
         <a class="card-link btn btn-info" href="/campgrounds/<%=campground._id%>/edit" class="card-link">Edit campground</a>
